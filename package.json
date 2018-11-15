@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "ncdSetPower": "./index.js"
+    "digi-set-power": "./index.js"
   },
   "author": "Trey Felton",
   "license": "ISC",
