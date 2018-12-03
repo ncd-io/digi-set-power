@@ -18,34 +18,21 @@ var modem;
 function selectPort(){
 	return new Promise((f, r) => {
 		sp.list().then((ports) => {
-			// var names = ports.filter((port) => port.manufacturer == 'FTDI').map(o => o.comName);
-			// if(names.length < 1){
-			// 	console.log('No modems found, please connect your modem through the USB port.');
-			// 	process.exit();
-			// }
-			if(ports.length == 1){
+			var names = ports.map(o => o.comName);
+			prompt({
+				name: 'port_selected',
+				type: 'list',
+				message: `Please select an option below, or type a number 1-${names.length}, then hit enter:`,
+				choices: names
+			}).then((r) => {
 				for(var i in ports){
-					if(ports[i].comName == names[0]){
+					if(ports[i].comName == r.port_selected){
 						f(getModem(ports[i].comName));
 						return;
 					}
 				}
-			}else{
-				prompt({
-					name: 'port_selected',
-					type: 'list',
-					message: `Please select an option below, or type a number 1-${names.length}, then hit enter:`,
-					choices: names
-				}).then((r) => {
-					for(var i in ports){
-						if(ports[i].comName == r.port_selected){
-							f(getModem(ports[i].comName));
-							return;
-						}
-					}
-					r('failed to find to modem!!!');
-				});
-			}
+				r('failed to find to modem!!!');
+			});
 		}).catch(console.log);
 	});
 }
