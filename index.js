@@ -59,7 +59,7 @@ function countdown(message, ms){
 }
 
 function getModem(port){
-	var serial = new comms.NcdSerial(port, 115200);
+	var serial = new comms.NcdSerial(port, 57600);
 	return new comms.NcdDigiParser(serial);
 }
 
