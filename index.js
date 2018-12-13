@@ -73,8 +73,9 @@ selectPort().then((modem) => {
 		var success = 0;
 		var fail = [];
 		macs.forEach((mac) => {
-			promises.push(modem.send.remote_at_command(mac, 'PL', [parseInt(power)], true));
+			promises.push(modem.send.remote_at_command(mac, 'PL', [parseInt(power)]));
 			promises.push(modem.send.remote_at_command(mac, 'WR'));
+			promises.push(modem.send.remote_at_command(mac, 'AC'));
 		});
 		Promise.all(promises).then((responses) => {
 			var total = macs.length;
