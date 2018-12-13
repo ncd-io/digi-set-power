@@ -73,12 +73,16 @@ selectPort().then((modem) => {
 		var success = 0;
 		var fail = [];
 		macs.forEach((mac) => {
-			promises.push(modem.send.remote_at_command(mac, 'PL', [parseInt(power)]));
+			promises.push(modem.send.remote_at_command(mac, 'PL', [parseInt(power)], true));
+			promises.push(modem.send.remote_at_command(mac, 'WR'));
 		});
 		Promise.all(promises).then((responses) => {
 			var total = macs.length;
-			var failed = responses.filter((resp) => {
+			var failed = [];
+			failed = responses.filter((resp) => {
 				return resp.status != 'OK';
+			}).map(v => v.remote_mac).filter((v, i, s) => {
+				return s.indexOf(v) === i;
 			});
 			console.log(`Successfully updated ${total - failed.length} module(s)!`);
 			if(failed.length){
