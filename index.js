@@ -75,13 +75,13 @@ selectPort().then((modem) => {
 		macs.forEach((mac) => {
 			promises.push(modem.send.remote_at_command(mac, 'PL', [parseInt(power)]));
 			promises.push(modem.send.remote_at_command(mac, 'WR'));
-			promises.push(modem.send.remote_at_command(mac, 'AC'));
+			promises.push(modem.send.remote_at_command(mac, 'AC').catch(() => {return "skip";}));
 		});
 		Promise.all(promises).then((responses) => {
 			var total = macs.length;
 			var failed = [];
 			failed = responses.filter((resp) => {
-				return resp.status != 'OK';
+				return resp != "skip" && resp.status != 'OK';
 			}).map(v => v.remote_mac).filter((v, i, s) => {
 				return s.indexOf(v) === i;
 			});
